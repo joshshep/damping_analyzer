@@ -1,6 +1,7 @@
 # Damping analyzer #
 
 ## Getting Started ##
+
 	* Clone the repo
     ```bash
     git clone https://github.com/joshshep/damping_analyzer.git
