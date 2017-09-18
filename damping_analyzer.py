@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 from __future__ import print_function
-from math import sin, pi
+from math import sin, pi, cos
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,7 +17,8 @@ class Wave:
 		self.start_angle = start_angle
 	def at(self, t):
 		if t >= self.start:
-			return self.mag * sin((self.freq)*t*2.0*pi)
+			cycle = self.freq * t
+			return self.mag * cos(cycle*2.0*pi + self.start_angle)
 		return 0.0
 
 class Waves:
