@@ -10,8 +10,8 @@ if __name__ == '__main__':
 		Wave(undamped_freq=20, mag=1.0/20, start_angle=pi/2), #same energy
 		#Wave(undamped_freq=1.0, damping_ratio=0),
 	])
-	#note: Nyquist's sampling theorem dictates that for a given sample rate only frequencies up to half the sample rate can be accurately measured
-	#https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem
+	# Nyquist's sampling theorem dictates that for a given sample rate only frequencies up to half the sample rate can be accurately measured
+	# https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem
 	waves.plot_dft(sampling_rate=15, t1=7)
 	plt.xlabel('Frequency (Hz)')
 	plt.ylabel('Amplitude')

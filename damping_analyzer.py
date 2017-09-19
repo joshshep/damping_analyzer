@@ -1,4 +1,26 @@
 #! /usr/bin/env python
+
+'''
+
+Created by:	Joshua Shepherd
+Started:	2017-09-19
+
+
+Helpful links
+wiki
+	https://en.wikipedia.org/wiki/Harmonic_oscillator
+	https://en.wikipedia.org/wiki/Damping_ratio
+
+hyperphysics
+	http://hyperphysics.phy-astr.gsu.edu/hbase/oscda.html
+	http://hyperphysics.phy-astr.gsu.edu/hbase/oscda2.html
+	http://hyperphysics.phy-astr.gsu.edu/hbase/shm2.html
+
+other
+	https://ocw.mit.edu/courses/mathematics/18-03sc-differential-equations-fall-2011/unit-ii-second-order-constant-coefficient-linear-equations/damped-harmonic-oscillators/MIT18_03SCF11_s13_2text.pdf
+'''
+
+
 from __future__ import print_function
 from math import sin, pi, cos, exp, sqrt
 
@@ -24,7 +46,9 @@ class Wave:
 		if self.damping_ratio <= 1:
 			# thank you wikipedia: https://en.wikipedia.org/wiki/Harmonic_oscillator#Damped_harmonic_oscillator
 			self.underdamped_freq = self.undamped_freq * sqrt(1 - self.damping_ratio**2)
-			
+	'''
+	Get the value of the wave at t seconds
+	'''
 	def at(self, t):
 		if t >= self.start_t:
 			t -= self.start_t
@@ -50,6 +74,9 @@ class Waves:
 	def __init__(self, waves):
 		self.waves += waves
 	
+	'''
+	Get the superposition of all of the waves at t seconds
+	'''
 	def at(self, t):
 		tot = 0.0
 		for wave in self.waves:
@@ -58,9 +85,6 @@ class Waves:
 	
 	def rm_dead_waves(self):
 		pass
-	
-	def add_wave(self, w):
-		waves.append(w)
 	
 	'''
 	
