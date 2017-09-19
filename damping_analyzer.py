@@ -9,14 +9,14 @@ class Wave:
 	"""
 	Waves with magnitudes and damping ratios and stimulation points?
 	"""
-	def __init__(self, mag=1.0, undamped_freq=1.0, damping_ratio=0.0, start=0.0, start_angle=0.0, color=None):
+	def __init__(self, mag=1.0, undamped_freq=1.0, damping_ratio=0.0, start_t=0.0, start_angle=0.0, color=None):
 		assert(mag>=0)
 		assert(undamped_freq>=0)
 		assert(damping_ratio>=0)
 		self.mag = mag
 		self.undamped_freq = undamped_freq
 		self.damping_ratio = damping_ratio
-		self.start = start
+		self.start_t = start_t
 		self.start_angle = start_angle
 		self.color = color
 		
@@ -26,14 +26,15 @@ class Wave:
 			self.underdamped_freq = self.undamped_freq * sqrt(1 - self.damping_ratio**2)
 			
 	def at(self, t):
-		if t >= self.start:
+		if t >= self.start_t:
+			t -= self.start_t
 			if self.damping_ratio <= 1:
 				#underdamped
 				#return exp(-1.0*self.undamped_freq*self.damping_ratio*t) * self.mag * cos( (self.underdamped_freq*t + self.start_angle)*2.0*pi )
 				return exp(-1.0*self.undamped_freq*2*pi*self.damping_ratio*t) * self.mag * cos( (self.underdamped_freq*t + self.start_angle)*2.0*pi )
 			else:
 				#critcally or over damped
-				return self.mag * exp(-1.0*2*pi*(1/self.damping_ratio)*t)
+				return self.mag * exp(-1.0*2*pi*(self.start_angle +(1/self.damping_ratio))*t)
 		return 0.0
 	
 	def get_latex_eq(self):
@@ -68,7 +69,16 @@ class Waves:
 	'''
 	def plot_dft(self, t0=0.0, t1=5.0, sampling_rate=20.0, color=None):
 		x = np.arange(t0, t1, 1.0/sampling_rate)
-		y = np.fft.ifft(x)
+		y = np.ndarray(x.shape)
+		for i in range(x.shape[0]):
+			y[i] = self.at(x[i])
+		s = np.fft.fft(y)
+		#np.fft.fftfreq tells you the frequencies associated with the coefficients
+		freqs = np.fft.fftfreq(len(y), d=1.0/sampling_rate)
+		#t = np.arange(0, s.real.shape[0]/sampling_rate, 1.0/sampling_rate)
+		#plt.plot(, s.real, label='real')
+		plt.plot(freqs, s.real, 'b-', label='real')
+		plt.plot(freqs, s.imag, 'r--', label='imaginary')
 	def plot_super(self, t0=0.0, t1=5.0, sampling_rate=20.0, color=None):
 		x = np.arange(t0, t1, 1.0/sampling_rate)
 		y = np.ndarray(x.shape)
