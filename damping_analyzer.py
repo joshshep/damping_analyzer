@@ -36,7 +36,7 @@ class Wave:
                     undamped_freq=1.0,
                     damping_ratio=0.0,
                     start_t=0.0,
-                    start_angle=0.0,
+                    phase=0.0,
                     color=None):
         assert(mag>=0)
         assert(undamped_freq>=0)
@@ -45,7 +45,7 @@ class Wave:
         self.undamped_freq = undamped_freq
         self.damping_ratio = damping_ratio
         self.start_t = start_t
-        self.start_angle = start_angle
+        self.phase = phase
         self.color = color
         
         # the frequency when underdamped is *not* the same as the resonance freq
@@ -60,13 +60,17 @@ class Wave:
             t -= self.start_t
             if self.damping_ratio <= 1:
                 #underdamped
-                #return exp(-1.0*self.undamped_freq*self.damping_ratio*t) * self.mag * cos( (self.underdamped_freq*t + self.start_angle)*2.0*pi )
-                return exp(-1.0*self.undamped_freq*2*pi*self.damping_ratio*t) * self.mag * cos( (self.underdamped_freq*t + self.start_angle)*2.0*pi )
+                #return exp(-1.0*self.undamped_freq*self.damping_ratio*t) * self.mag * cos( (self.underdamped_freq*t + self.phase)*2.0*pi )
+                return exp(-1.0*self.undamped_freq*2*pi*self.damping_ratio*t) * self.mag * cos( (self.underdamped_freq*t + self.phase)*2.0*pi )
             else:
                 #critcally or over damped
-                return self.mag * exp(-1.0*2*pi*(self.start_angle +(1/self.damping_ratio))*t)
+                return self.mag * exp(-1.0*2*pi*(self.phase +(1/self.damping_ratio))*t)
         return 0.0
-    
+    def ats(self, ts):
+        y = np.ndarray(ts.shape[0])
+        for i in range(ts.shape[0]):
+            y[i] = self.at(ts[i])
+        return y
     def get_latex_eq(self):
         pass
         #return r'$e^-1$'
