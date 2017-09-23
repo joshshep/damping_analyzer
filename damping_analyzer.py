@@ -87,7 +87,10 @@ class Wave:
                 #critcally or over damped
                 return self.mag * exp(-1.0*(self.phase +(1/self.damping_ratio))*t)
         return 0.0
-        
+    
+    '''
+    Same as at() but the in/outputs are lists
+    '''
     def ats(self, ts):
         y = np.ndarray(ts.shape[0])
         for i in range(ts.shape[0]):
