@@ -1,5 +1,7 @@
 # Damping analyzer #
 
+![graph with different damping ratios](imgs/plt_indi_w0_1.0Hz.png)
+
 ## Getting Started ##
 
 * Clone the repo
