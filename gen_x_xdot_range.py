@@ -5,30 +5,17 @@ from damping_analyzer import Wave, Waves
 from math import pi
 from scipy import signal
 import matplotlib.gridspec as gridspec
+from utils import ensure_path_exists
+from os.path import join
 
 if __name__ == '__main__':
-    '''
-    waves = Waves([
-        Wave(freq=1.3),
-        Wave(freq=7, mag=0.25)
-    ])
-    '''
-    '''
-    waves = Waves([
-        Wave(freq=1,   damping_ratio=1),
-        Wave(freq=1.0, damping_ratio=1),
-        Wave(freq=0.2, damping_ratio=1),
-    ])
-    '''
-    wave = Wave(undamped_freq=1, damping_ratio=0.145)
-    sampling_rate = 100
+
+    sampling_rate = 200
     t1 = 5
-    x = np.arange(0, t1, 1.0/sampling_rate)
-    y = wave.ats(x)
-    peakind = signal.find_peaks_cwt(y, np.arange(1,100))
-    print ('peakind: {}'.format(peakind))
-    print ('x[peakind]: {}'.format(x[peakind]))
-    print ('y[peakind]: {}'.format(y[peakind]))
+    IMG_DIR = 'imgs/'
+    ensure_path_exists(IMG_DIR)
+    
+    freqs = [0.5, 1, 1.5, 2, 2.5, 3, 3.3, 4, 5, 8]
     
     x_fmt_gen_eq = r'$x(t) = A e^{-\omega_0 \zeta t} \cos( \omega_d t )$'
 
@@ -48,45 +35,56 @@ if __name__ == '__main__':
     # OVERdamped x(t)
     #fmt_gen_eq = r'$ A e^{- \frac{1}{\zeta} t} $'
     
-    gs0 = gridspec.GridSpec(2,1)
-    tPlot, axes = plt.subplots(nrows=2, ncols=1, sharex=True)
     
-    freqs = [0.5, 1, 1.5, 2, 2.5, 3, 3.3, 4, 5, 8]
+    #freqs = [0.5, 1, 1.5, 2, 2.5, 3, 3.3, 4, 5, 8]
+    
+    fig = plt.figure()
+    fig.set_size_inches(18.5, 10.5)
+    
+    ax0 = fig.add_subplot(2,1,1)
+    ax1 = fig.add_subplot(2,1,2, sharex=ax0)
+    
+    legend_loc = 'upper right'
+    
     
     for undamped_freq in freqs:
-        
+        print('freq (w_0): {:1.1f} Hz'.format(undamped_freq))
         waves = Waves([
             Wave(undamped_freq=undamped_freq, damping_ratio=0),
             Wave(undamped_freq=undamped_freq, damping_ratio=0.05),
             Wave(undamped_freq=undamped_freq, damping_ratio=0.2),
             Wave(undamped_freq=undamped_freq, damping_ratio=0.5),
             Wave(undamped_freq=undamped_freq, damping_ratio=0.8)
-            #Wave(undamped_freq=1.0, damping_ratio=0),
         ])
+
+        waves.plot_indi(     ax0, sampling_rate=sampling_rate, t1=t1)
+        waves.plot_indi_xdot(ax1, sampling_rate=sampling_rate, t1=t1)
         
-        waves.plot_indi(axes[0], sampling_rate=sampling_rate, t1=t1)
+        w0_label = r'$ \omega_0 = {} Hz $'.format(undamped_freq)
+        fig.suptitle(w0_label, fontsize=20)
+        
+        ax0.set_title(x_fmt_gen_eq, fontsize=18)
+        #ax0.set_xlabel(r'$\omega t$', fontsize=14)
+        ax0.set_ylabel(r'$ x(t) $', fontsize=14)
+        ax0.axhline(y=0, linewidth=0.5, color='black')
+        ax0.legend(fontsize=12, loc=legend_loc)
+        ax0.get_xaxis().set_visible(False)
         
         
-        axes[0].set_title(x_fmt_gen_eq, fontsize=18)
-        #axes[0].set_xlabel(r'$\omega t$', fontsize=14)
-        axes[0].set_ylabel(r'$x(t)\//\/x(0)$', fontsize=14)
-        axes[0].axhline(y=0, linewidth=0.5, color='black')
-        axes[0].legend(fontsize=12)
-        
-        waves.plot_indi_xdot(axes[1], sampling_rate=sampling_rate, t1=t1)
+        ax1.set_title(xdot_fmt_gen_eq, fontsize=18)
+        ax1.set_xlabel(r'$ t $', fontsize=14)
+        ax1.set_ylabel(r'$ \dot{x}(t) $', fontsize=14)
+        ax1.axhline(y=0, linewidth=0.5, color='black')
+        ax1.legend(fontsize=12, loc=legend_loc)
         
         
-        axes[1].set_title(xdot_fmt_gen_eq, fontsize=18)
-        axes[1].set_xlabel(r'$\omega t$', fontsize=14)
-        axes[1].set_ylabel(r'$x(t)\//\/x(0)$', fontsize=14)
-        axes[1].axhline(y=0, linewidth=0.5, color='black')
-        axes[1].legend(fontsize=12)
         
-        plt.savefig('plt_indi_w0_{}.png'.format(undamped_freq))
-        axes[0].clear()
-        axes[1].clear()
-    plt.show()
-    
+        pic_bname = join(IMG_DIR, 'plt_indi_w0_{:1.1f}Hz'.format(undamped_freq))
+        fig.savefig(pic_bname+'.png')
+        fig.savefig(pic_bname+'.pdf')
+        
+        ax0.cla()
+        ax1.cla()
     
     
     
