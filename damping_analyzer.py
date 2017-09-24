@@ -105,10 +105,9 @@ class Waves:
     """
     A collection of waves
     """
-    waves = []
     
     def __init__(self, waves):
-        self.waves += waves
+        self.waves = waves
     
     '''
     Get the superposition of all of the waves at t seconds
@@ -123,9 +122,7 @@ class Waves:
         pass
     
     '''
-    
     Plotting functions
-    
     '''
     def plot_dft(self, t0=0.0, t1=5.0, sampling_rate=20.0, color=None):
         x = np.arange(t0, t1, 1.0/sampling_rate)
