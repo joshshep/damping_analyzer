@@ -13,13 +13,14 @@ if __name__ == '__main__':
     # Nyquist's sampling theorem dictates that for a given sample rate only
     # frequencies up to half the sample rate can be accurately measured
     # https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem
-    waves.plot_dft(sampling_rate=15, t1=7)
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Amplitude')
-    plt.axhline(y=0, linewidth=0.5, color='black')
-    plt.legend()
+    ax = plt.gca()
+    waves.plot_dft(ax, sampling_rate=15, t1=7)
+    ax.set_xlabel('Frequency (Hz)')
+    ax.set_ylabel('Amplitude')
+    ax.axhline(y=0, linewidth=0.5, color='black')
+    ax.legend()
     
-    plt.grid()
+    ax.grid()
     
     plt.savefig('fft.png')
     plt.show()

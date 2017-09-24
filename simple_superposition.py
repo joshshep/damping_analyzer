@@ -25,13 +25,14 @@ if __name__ == '__main__':
         Wave(undamped_freq=10/(2*pi), damping_ratio=2),
         #Wave(undamped_freq=1.0, damping_ratio=0),
     ])
-    waves.plot_indi(sampling_rate=100, t1=1.6)
+    ax = plt.gca()
+    waves.plot_indi(ax, sampling_rate=100, t1=1.6)
     #waves.plot_super(sampling_rate=100, t1=1.6)
     #waves.plot_dft()
-    plt.xlabel(r'$\omega t$')
-    plt.ylabel(r'$x(t)\//\/x(0)$')
-    plt.axhline(y=0, linewidth=0.5, color='black')
-    plt.legend()
+    ax.set_xlabel(r'$\omega t$')
+    ax.set_ylabel(r'$x(t)\//\/x(0)$')
+    ax.axhline(y=0, linewidth=0.5, color='black')
+    ax.legend()
     
     plt.savefig('hyperphysics_similar.png')
     plt.show()

@@ -124,7 +124,7 @@ class Waves:
     '''
     Plotting functions
     '''
-    def plot_dft(self, t0=0.0, t1=5.0, sampling_rate=20.0, color=None):
+    def plot_dft(self, ax, t0=0.0, t1=5.0, sampling_rate=20.0, color=None):
         x = np.arange(t0, t1, 1.0/sampling_rate)
         y = np.ndarray(x.shape)
         for i in range(x.shape[0]):
@@ -133,16 +133,16 @@ class Waves:
         #np.fft.fftfreq tells you the frequencies associated with the coefficients
         freqs = np.fft.fftfreq(len(y), d=1.0/sampling_rate)
         #t = np.arange(0, s.real.shape[0]/sampling_rate, 1.0/sampling_rate)
-        #plt.plot(, s.real, label='real')
-        plt.plot(freqs, s.real, 'b-', label='real')
-        plt.plot(freqs, s.imag, 'r--', label='imaginary')
+        #ax.plot(, s.real, label='real')
+        ax.plot(freqs, s.real, 'b-', label='real')
+        ax.plot(freqs, s.imag, 'r--', label='imaginary')
 
-    def plot_super(self, t0=0.0, t1=5.0, sampling_rate=20.0, color=None):
+    def plot_super(self, ax, t0=0.0, t1=5.0, sampling_rate=20.0, color=None):
         x = np.arange(t0, t1, 1.0/sampling_rate)
         y = np.ndarray(x.shape)
         for i in range(x.shape[0]):
             y[i] = self.at(x[i])
-        plt.plot(x,y, color=color, label='super')
+        ax.plot(x,y, color=color, label='super')
     
     def plot_indi(self, ax, t0=0.0, t1=5.0, sampling_rate=20.0):
         x = np.arange(t0, t1, 1.0/sampling_rate)
