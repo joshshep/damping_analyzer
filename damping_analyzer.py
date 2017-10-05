@@ -30,10 +30,10 @@ import matplotlib.pyplot as plt
 class Wave:
     """
     Waves with magnitudes and damping ratios and stimulation points?
-    
+
     Input angles are in Hz (they are immediately translated to radians)
     """
-    
+
     def __init__(self,
                     mag=1.0,
                     undamped_freq=1.0,
@@ -50,7 +50,7 @@ class Wave:
         self.start_t = start_t
         self.phase = phase * 2 * pi
         self.color = color
-        
+
         # the frequency when underdamped is *not* the same as the resonance freq
         if self.damping_ratio <= 1:
             # thank you wikipedia: https://en.wikipedia.org/wiki/Harmonic_oscillator#Damped_harmonic_oscillator
@@ -64,13 +64,13 @@ class Wave:
         if t >= self.start_t:
             t -= self.start_t
             if self.damping_ratio <= 1:
-                #underdamped
+                #critically or underdamped
                 #https://sites.math.washington.edu/~king/coursedir/m308a01/Projects/m308a01-pdf/reed.pdf
                 #return exp(-1.0*self.undamped_freq*self.damping_ratio*t) * self.mag * cos( (self.underdamped_freq*t + self.phase)*2.0*pi )
                 return exp(-1.0*self.undamped_freq*self.damping_ratio*t) * self.mag * cos( self.underdamped_freq*t + self.phase )
             else:
                 #critcally or over damped
-                return self.mag * exp(-1.0*(self.phase +(1/self.damping_ratio))*t)
+                return self.mag * exp(-1.0*(self.phase +(1.0/self.damping_ratio))*t)
         return 0.0
     def xdot_at(self, t):
         if t >= self.start_t:
@@ -85,9 +85,10 @@ class Wave:
                 return -1.0 * A * exp(-1.0*w_0*zeta*t) * ( zeta*cos(w_d*t + phi) + w_d*sin(w_d*t + phi) )
             else:
                 #critcally or over damped
-                return self.mag * exp(-1.0*(self.phase +(1/self.damping_ratio))*t)
+				#TODO
+				pass
         return 0.0
-    
+
     '''
     Same as at() but the in/outputs are lists
     '''
@@ -105,10 +106,10 @@ class Waves:
     """
     A collection of waves
     """
-    
+
     def __init__(self, waves):
         self.waves = waves
-    
+
     '''
     Get the superposition of all of the waves at t seconds
     '''
@@ -117,10 +118,10 @@ class Waves:
         for wave in self.waves:
             tot += wave.at(t)
         return tot
-    
+
     def rm_dead_waves(self):
         pass
-    
+
     '''
     Plotting functions
     '''
@@ -143,7 +144,7 @@ class Waves:
         for i in range(x.shape[0]):
             y[i] = self.at(x[i])
         ax.plot(x,y, color=color, label='super')
-    
+
     def plot_indi(self, ax, t0=0.0, t1=5.0, sampling_rate=20.0):
         x = np.arange(t0, t1, 1.0/sampling_rate)
         y = np.ndarray(x.shape)
@@ -163,11 +164,10 @@ class Waves:
             ax.plot(x, y,
                      color=wave.color,
                      label=r'$\zeta = $'+str(wave.damping_ratio))
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
