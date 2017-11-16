@@ -25,9 +25,10 @@ for i = 1:l_wn
         grid on
         hold on
     end
-        ylabel('Magnitude')
-        xlabel('Time (sec)')
-        legend('show');
+    
+    ylabel('Magnitude')
+    xlabel('Time (sec)')
+    legend('show');
         
     hold off
 end
